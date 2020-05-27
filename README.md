@@ -1,1 +1,1 @@
-# hades_quality-assurance
+# hades_quality_assurance
