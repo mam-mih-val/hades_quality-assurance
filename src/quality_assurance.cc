@@ -6,6 +6,8 @@
 #include <chrono>
 #include <iostream>
 
+#include "mdc_vertex_tracks.h"
+
 int main(int argv, char **argc){
   auto start = std::chrono::system_clock::now();
   if( argv < 2 ){
@@ -18,9 +20,12 @@ int main(int argv, char **argc){
   std::string file_output{"output.root"};
   if( argv > 2 )
     file_output = argc[2];
-  TFile* file = TFile::Open( file_list.data() );
+  TFile* file = TFile::Open( "~/a_tree_example.root" );
   AnalysisTree::Configuration* config{nullptr};
   file->GetObject("Configuration", config);
+  config->Print();
   AnalysisTree::QA::Manager qa_manager(file_list, "hades_analysis_tree");
+  MdcVertexTracks::AddVertexTrackQa(qa_manager);
+  qa_manager.Run();
   return 0;
 }

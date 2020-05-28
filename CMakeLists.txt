@@ -31,7 +31,15 @@ link_directories(
         ${AnalysisTree_LIBRARY_DIR}
         ${AnalysisTreeQA_LIBRARY_DIR}
 )
+
+set(HEADERS
+        src/mdc_vertex_tracks.h
+)
+set(SOURCES
+        src/mdc_vertex_tracks.cc
+
+)
 add_definitions(${ROOT_CXX_FLAGS})
 
-add_executable(run_qa quality_assurance.cc)
+add_executable(run_qa src/quality_assurance.cc ${HEADERS} ${SOURCES})
 target_link_libraries(run_qa ${ROOT_LIBRARIES} AnalysisTreeBase AnalysisTreeQA)
