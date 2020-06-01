@@ -36,11 +36,13 @@ set(HEADERS
         src/mdc_vertex_tracks.h
         src/meta_hits.h
         src/forward_wall_hits.h
+        src/event_info.h
 )
 set(SOURCES
         src/mdc_vertex_tracks.cc
         src/meta_hits.cc
         src/forward_wall_hits.cc
+        src/event_info.cc
 )
 add_definitions(${ROOT_CXX_FLAGS})
 

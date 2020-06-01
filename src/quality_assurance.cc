@@ -6,9 +6,10 @@
 #include <chrono>
 #include <iostream>
 
+#include "event_info.h"
+#include "forward_wall_hits.h"
 #include "mdc_vertex_tracks.h"
 #include "meta_hits.h"
-#include "forward_wall_hits.h"
 
 int main(int argv, char **argc){
   auto start = std::chrono::system_clock::now();
@@ -30,6 +31,7 @@ int main(int argv, char **argc){
   MdcVertexTracks::Add(qa_manager);
   MetaHits::Add(qa_manager);
   ForwardWallHits::Add(qa_manager);
+  EventInfo::Add(qa_manager);
   qa_manager.Run();
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end - start;

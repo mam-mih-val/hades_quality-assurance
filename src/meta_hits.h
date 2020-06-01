@@ -63,22 +63,22 @@ public:
 
     qa_manager.AddEntry2D({charged_mass,
                            {"pt, [GeV/c]", "mdc_vtx_tracks", "pT"}}, {
-        {200, -1.0, 5.0}, {250, 0.0, 2.5}});
+        {200, -1.0, 10.0}, {250, 0.0, 2.5}});
     qa_manager.AddEntry2D({charged_mass,
                            {"pt, [GeV/c]", "mdc_vtx_tracks", "pT"}}, {
-        {200, -1.0, 5.0}, {250, 0.0, 2.5}}, protons);
+        {200, -1.0, 10.0}, {250, 0.0, 2.5}}, protons);
     qa_manager.AddEntry2D({charged_mass,
                            {"pt, [GeV/c]", "mdc_vtx_tracks", "pT"}}, {
-        {200, -1.0, 5.0}, {250, 0.0, 2.5}}, kaons_plus);
+        {200, -1.0, 10.0}, {250, 0.0, 2.5}}, kaons_plus);
     qa_manager.AddEntry2D({charged_mass,
                            {"pt, [GeV/c]", "mdc_vtx_tracks", "pT"}}, {
-        {200, -1.0, 5.0}, {250, 0.0, 2.5}}, kaons_minus);
+        {200, -1.0, 10.0}, {250, 0.0, 2.5}}, kaons_minus);
     qa_manager.AddEntry2D({charged_mass,
                            {"pt, [GeV/c]", "mdc_vtx_tracks", "pT"}}, {
-        {200, -1.0, 5.0}, {250, 0.0, 2.5}}, pions_plus);
+        {200, -1.0, 10.0}, {250, 0.0, 2.5}}, pions_plus);
     qa_manager.AddEntry2D({charged_mass,
                            {"pt, [GeV/c]", "mdc_vtx_tracks", "pT"}}, {
-        {200, -1.0, 5.0}, {250, 0.0, 2.5}}, pions_minus);
+        {200, -1.0, 10.0}, {250, 0.0, 2.5}}, pions_minus);
   }
 
 };
