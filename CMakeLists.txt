@@ -34,10 +34,13 @@ link_directories(
 
 set(HEADERS
         src/mdc_vertex_tracks.h
+        src/meta_hits.h
+        src/forward_wall_hits.h
 )
 set(SOURCES
         src/mdc_vertex_tracks.cc
-
+        src/meta_hits.cc
+        src/forward_wall_hits.cc
 )
 add_definitions(${ROOT_CXX_FLAGS})
 
