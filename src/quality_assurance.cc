@@ -10,6 +10,7 @@
 #include "forward_wall_hits.h"
 #include "mdc_vertex_tracks.h"
 #include "meta_hits.h"
+#include "sim_data.h"
 
 int main(int argv, char **argc){
   auto start = std::chrono::system_clock::now();
@@ -18,12 +19,12 @@ int main(int argv, char **argc){
     std::cout << "Example: ./run_qa path/to/input.root path/to/output.root" << std::endl;
     return 1;
   }
-  std::string file_list;
-  file_list = argc[1];
+  std::string file_list{argc[argv-1]};
+  std::string flag{argc[1]};
   std::string file_output{"output.root"};
   if( argv > 2 )
     file_output = argc[2];
-  TFile* file = TFile::Open( "~/a_tree_example.root" );
+  TFile* file = TFile::Open( "~/a_tree_mc.root" );
   AnalysisTree::Configuration* config{nullptr};
   file->GetObject("Configuration", config);
   config->Print();
@@ -32,6 +33,8 @@ int main(int argv, char **argc){
   MetaHits::Add(qa_manager);
   ForwardWallHits::Add(qa_manager);
   EventInfo::Add(qa_manager);
+  if( flag == "--mc" )
+    SimData::Add(qa_manager);
   qa_manager.Run();
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end - start;

@@ -26,12 +26,12 @@ public:
     qa_manager.AddEntry2D({{"N hits META", "event_header", "selected_tof_rpc_hits"},
                            {"FW signal", "event_header", "fw_adc"}},
                           {{250, 0.0, 250.0},
-                           {200, 0.0, 10000.0}});
+                           {200, 0.0, 100.0}});
 
     qa_manager.AddEntry2D({{"N hits MDC", "event_header", "selected_mdc_tracks"},
                            {"FW signal", "event_header", "fw_adc"}},
                           {{100, 0.0, 100.0},
-                           {200, 0.0, 10000.0}});
+                           {200, 0.0, 100.0}});
   }
 };
 

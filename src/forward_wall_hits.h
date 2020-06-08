@@ -12,9 +12,9 @@ public:
     Variable module_id( "FW channel", "forward_wall_hits", "module_id" );
 
     qa_manager.AddEntry({"Wall Hit Charge", "forward_wall_hits", "signal"},
-                        {100, 0.0, 1000});
+                        {100, 0.0, 30});
     qa_manager.AddEntry2D({{"Wall Hit Charge", "forward_wall_hits", "signal"}, module_id },
-                          {{100, 0.0, 1000}, {304, 0.0, 304}});
+                          {{100, 0.0, 30}, {304, 0.0, 304}});
     qa_manager.AddEntry2D({{"#beta", "forward_wall_hits", "beta"}, module_id },
                           {{120, 0.0, 1.2}, {304, 0.0, 304}});
 
