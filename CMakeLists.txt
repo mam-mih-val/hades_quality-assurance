@@ -11,7 +11,7 @@ list(APPEND CMAKE_PREFIX_PATH ${AnalysisTreeQA_HOME})
 find_package(ROOT REQUIRED COMPONENTS RIO Tree)
 find_package(AnalysisTree REQUIRED)
 find_package(AnalysisTreeQA REQUIRED)
-add_definitions(-DUSEBOOST)
+#add_definitions(-DUSEBOOST)
 
 set(CMAKE_CXX_FLAGS "-Wall")
 
@@ -32,21 +32,14 @@ link_directories(
         ${AnalysisTreeQA_LIBRARY_DIR}
 )
 
-set(HEADERS
-        src/mdc_vertex_tracks.h
-        src/meta_hits.h
-        src/forward_wall_hits.h
-        src/event_info.h
-        src/sim_data.h
-)
 set(SOURCES
         src/mdc_vertex_tracks.cc
         src/meta_hits.cc
         src/forward_wall_hits.cc
-        src/sim_data.cc
+#        src/sim_data.cc
         src/event_info.cc
 )
 add_definitions(${ROOT_CXX_FLAGS})
 
-add_executable(run_qa src/quality_assurance.cc ${HEADERS} ${SOURCES})
+add_executable(run_qa src/quality_assurance.cc ${SOURCES})
 target_link_libraries(run_qa ${ROOT_LIBRARIES} AnalysisTreeBase AnalysisTreeQA)
