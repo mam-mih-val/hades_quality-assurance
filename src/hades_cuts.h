@@ -6,7 +6,10 @@ namespace AnalysisTree{
 
 Cuts* GetHadesEventCuts(const std::string& branch, const std::string& name="HadesGoodEvent") {
   Cuts* event_cuts = new Cuts(name);
-  SimpleCut vtx_xy_cut{{{"vtx_x", "vtx_y"}}, [](std::vector<double> r){
+  SimpleCut vtx_xy_cut{{
+                           {branch, "vtx_x"},
+                           {branch, "vtx_y"},
+                       }, [](std::vector<double> r){
                          return sqrt(r.at(0)*r.at(0) + r.at(1)*r.at(1)) < 3.0;
                        }};
   SimpleCut vtx_z_cut({branch, "vtx_z"}, -60.0, 0.0);
@@ -19,8 +22,8 @@ Cuts* GetHadesEventCuts(const std::string& branch, const std::string& name="Hade
   SimpleCut good_start_veto_cut({branch,"good_start_veto"}, 0.5, 1.5);
   SimpleCut good_start_meta_cut({branch,"good_start_meta"}, 0.5, 1.5);
   event_cuts->AddCuts({
-      vtx_xy_cut,
-      vtx_z_cut,
+//      vtx_xy_cut,
+//      vtx_z_cut,
       vtx_chi2_cut,
       good_vertex_cut,
       good_vertex_candidate_cut,
