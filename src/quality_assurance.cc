@@ -35,10 +35,10 @@ int main(int argv, char **argc){
   qa_manager.SetOutFileName(file_output);
   auto* qa_task = new AnalysisTree::QA::Task;
 
-  qa_manager.AddBranchCut(AnalysisTree::GetHadesEventCuts("event_header"));
+  qa_manager.SetEventCuts(AnalysisTree::GetHadesEventCuts("event_header"));
   qa_manager.AddBranchCut(AnalysisTree::GetHadesTrackCuts("mdc_vtx_tracks"));
   qa_manager.AddBranchCut(AnalysisTree::GetHadesMetaHitsCuts("meta_hits"));
-  qa_manager.AddBranchCut(AnalysisTree::GetHadesWallHitsCuts("forward_wall_hits"));
+//  qa_manager.AddBranchCut(AnalysisTree::GetHadesWallHitsCuts("forward_wall_hits"));
 
   AnalysisTree::MdcVertexTracks::Add(qa_task);
   AnalysisTree::MetaHits::Add(qa_task);
