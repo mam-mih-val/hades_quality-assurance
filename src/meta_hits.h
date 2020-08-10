@@ -12,6 +12,10 @@ public:
   static void Add(QA::Task* qa_manager) {
     qa_manager->AddEntry({"META match radius, mm", "meta_hits", "match_radius"},
                         {100, 0.0, 40.0});
+
+    qa_manager->AddEntry({"beta", "meta_hits", "beta"},
+                        {150, 0.0, 1.5});
+
     Cuts *protons = new Cuts("protons");
     protons->AddCut({{"mdc_vtx_tracks","geant_pid"}, 14. - 0.5, 14. + 0.5});
 
@@ -28,13 +32,15 @@ public:
     kaons_minus->AddCut({{"mdc_vtx_tracks","geant_pid"}, 12. - 0.5, 12. + 0.5});
 
     Variable charged_p(
-        "p #times z, [z #times #frac{GeV}{c}]", "mdc_vtx_tracks", {"charge", "p"},
+        "p #times z, [z #times #frac{GeV}{c}]", {{"mdc_vtx_tracks","charge"}, {"mdc_vtx_tracks","p"}},
         [](std::vector<double> &var) { return var.at(0) * var.at(1); });
 
-    Variable sqrt_m2("mass META, [#frac{GeV}{c}^{2}]", "meta_hits", {"mass2"},
+    Variable sqrt_m2("mass META, [#frac{GeV}{c}^{2}]", {{"meta_hits", "mass2"}},
                      [](std::vector<double> &var) { return sqrtf(var.at(0)); });
     Variable charged_mass(
-        "m*z META, [z*#frac{GeV}{c}^{2}]", "meta_hits", {"mass2", "charge"},
+        "m*z META, [z*#frac{GeV}{c}^{2}]", {
+                                               {"meta_hits","mass2"},
+                                               {"meta_hits", "charge"}},
         [](std::vector<double> &var) { return sqrtf(var.at(0)) * var.at(1); });
 
     // momentum vs energy loss
@@ -42,33 +48,13 @@ public:
                           {{200, -2.0, 5.0}, {200, 0.0, 20.0}});
     qa_manager->AddEntry2D({charged_p, {"#frac{dE}{dx} META", "meta_hits", "dEdx"}},
                           {{200, -2.0, 5.0}, {200, 0.0, 20.0}}, protons);
-    qa_manager->AddEntry2D({charged_p, {"#frac{dE}{dx} META", "meta_hits", "dEdx"}},
-                          {{200, -2.0, 5.0}, {200, 0.0, 20.0}}, pions_plus);
-    qa_manager->AddEntry2D({charged_p, {"#frac{dE}{dx} META", "meta_hits", "dEdx"}},
-                          {{200, -2.0, 5.0}, {200, 0.0, 20.0}}, pions_minus);
-    qa_manager->AddEntry2D({charged_p, {"#frac{dE}{dx} META", "meta_hits", "dEdx"}},
-                          {{200, -2.0, 5.0}, {200, 0.0, 20.0}}, kaons_plus);
-    qa_manager->AddEntry2D({charged_p, {"#frac{dE}{dx} META", "meta_hits", "dEdx"}},
-                          {{200, -2.0, 5.0}, {200, 0.0, 20.0}}, kaons_minus);
 
     qa_manager->AddEntry2D(
-        {charged_mass, {"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"}},
-        {{200, -1.0, 10.0}, {250, 0.0, 2.5}});
+        {{"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"},charged_mass},
+        {{250, 0.0, 2.5}, {200, -1.0, 10.0}});
     qa_manager->AddEntry2D(
-        {charged_mass, {"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"}},
-        {{200, -1.0, 10.0}, {250, 0.0, 2.5}}, protons);
-    qa_manager->AddEntry2D(
-        {charged_mass, {"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"}},
-        {{200, -1.0, 10.0}, {250, 0.0, 2.5}}, kaons_plus);
-    qa_manager->AddEntry2D(
-        {charged_mass, {"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"}},
-        {{200, -1.0, 10.0}, {250, 0.0, 2.5}}, kaons_minus);
-    qa_manager->AddEntry2D(
-        {charged_mass, {"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"}},
-        {{200, -1.0, 10.0}, {250, 0.0, 2.5}}, pions_plus);
-    qa_manager->AddEntry2D(
-        {charged_mass, {"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"}},
-        {{200, -1.0, 10.0}, {250, 0.0, 2.5}}, pions_minus);
+        {{"pt, [#frac{GeV}{c}]", "mdc_vtx_tracks", "pT"},charged_mass},
+        {{250, 0.0, 2.5}, {200, -1.0, 10.0}}, protons);
   }
 };
 } // namespace AnalysisTree

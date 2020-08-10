@@ -5,6 +5,7 @@ project(quality_assurance)
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 list(APPEND CMAKE_PREFIX_PATH $ENV{AnalysisTree_HOME})
 list(APPEND CMAKE_PREFIX_PATH $ENV{AnalysisTreeQA_HOME})
+list(APPEND CMAKE_PREFIX_PATH $ENV{HadesUtils_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${AnalysisTree_HOME})
 list(APPEND CMAKE_PREFIX_PATH ${AnalysisTreeQA_HOME})
 
@@ -23,10 +24,10 @@ include_directories(
         ${ROOT_INCLUDE_DIRS}
         ${AnalysisTree_INCLUDE_DIR}
         ${AnalysisTreeQA_INCLUDE_DIR}
+        $ENV{HadesUtils_DIR}/include
 )
 
 link_directories(
-        $ENV{HADDIR}/lib
         ${CMAKE_SOURCE_DIR}
         ${AnalysisTree_LIBRARY_DIR}
         ${AnalysisTreeQA_LIBRARY_DIR}
@@ -42,4 +43,4 @@ set(SOURCES
 add_definitions(${ROOT_CXX_FLAGS})
 
 add_executable(run_qa src/quality_assurance.cc ${SOURCES})
-target_link_libraries(run_qa ${ROOT_LIBRARIES} AnalysisTreeBase AnalysisTreeQA)
+target_link_libraries(run_qa ${ROOT_LIBRARIES} AnalysisTreeBase AnalysisTreeQA $ENV{HadesUtils_DIR}/lib/libHadesUtils.so)

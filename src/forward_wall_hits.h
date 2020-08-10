@@ -16,8 +16,18 @@ public:
     qa_manager->AddEntry2D(
         {{"Wall Hit Charge", "forward_wall_hits", "signal"}, module_id},
         {{100, 0.0, 1000}, {304, 0.0, 304}});
+
     qa_manager->AddEntry2D({{"#beta", "forward_wall_hits", "beta"}, module_id},
                           {{120, 0.0, 1.2}, {304, 0.0, 304}});
+
+    qa_manager->AddEntry2D({{"time", "forward_wall_hits", "time"}, module_id},
+                          {{500, 20.0, 50.0}, {304, 0.0, 304}});
+
+    qa_manager->AddEntry2D({{"z", "forward_wall_hits", "z"}, module_id},
+                          {{100, 6650.0, 6900.0}, {304, 0.0, 304}});
+
+    qa_manager->AddEntry2D({{"ring", "forward_wall_hits", "ring"}, module_id},
+                          {{11, 0.0, 10.0}, {304, 0.0, 304}});
 
     Cuts *inner_modules = new Cuts("inner modules");
     inner_modules->AddCut({{"forward_wall_hits","ring"}, 0.9, 5.1});

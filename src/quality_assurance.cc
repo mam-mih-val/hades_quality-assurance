@@ -11,7 +11,8 @@
 #include "event_info.h"
 #include "meta_hits.h"
 #include "forward_wall_hits.h"
-#include "hades_cuts.h"
+//#include "hades_cuts.h"
+#include <cuts.h>
 
 //#include "sim_data.h"
 
@@ -35,10 +36,12 @@ int main(int argv, char **argc){
   qa_manager.SetOutFileName(file_output);
   auto* qa_task = new AnalysisTree::QA::Task;
 
-  qa_manager.SetEventCuts(AnalysisTree::GetHadesEventCuts("event_header"));
-  qa_manager.AddBranchCut(AnalysisTree::GetHadesTrackCuts("mdc_vtx_tracks"));
-  qa_manager.AddBranchCut(AnalysisTree::GetHadesMetaHitsCuts("meta_hits"));
-//  qa_manager.AddBranchCut(AnalysisTree::GetHadesWallHitsCuts("forward_wall_hits"));
+//  qa_manager.SetEventCuts(HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::EVENT_HEADER,
+//                                                HadesUtils::DATA_TYPE::AgAg_1_23AGeV));
+//  qa_manager.AddBranchCut(AnalysisTree::GetHadesTrackCuts("mdc_vtx_tracks"));
+//  qa_manager.AddBranchCut(AnalysisTree::GetHadesMetaHitsCuts("meta_hits"));
+  qa_manager.AddBranchCut(HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::WALL_HITS,
+                                                HadesUtils::DATA_TYPE::AgAg_1_23AGeV));
 
   AnalysisTree::MdcVertexTracks::Add(qa_task);
   AnalysisTree::MetaHits::Add(qa_task);
@@ -49,7 +52,7 @@ int main(int argv, char **argc){
 
   qa_manager.AddTask(qa_task);
   qa_manager.Init();
-  qa_manager.Run(20000);
+  qa_manager.Run(10000);
   qa_manager.Finish();
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end - start;

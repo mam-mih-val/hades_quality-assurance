@@ -14,13 +14,13 @@ public:
     pt3->AddCut({{"event_header","physical_trigger_3"}, 1. - 0.5, 1. + 0.5});
 
     qa_manager->AddEntry({"VTX_{Z}, mm", "event_header", "vtx_z"},
-                        {100, -80.0, 20.0});
+                        {500, -80.0, 20.0});
 
     qa_manager->AddEntry({"VTX_{X}, mm", "event_header", "vtx_x"},
-                        {250, -5.0, 5.0});
+                        {500, -10.0, 10.0});
 
     qa_manager->AddEntry({"VTX_{Y}, mm", "event_header", "vtx_y"},
-                        {250, -5.0, 5.0});
+                        {500, -10.0, 10.0});
 
     qa_manager->AddEntry({"selected META hits", "event_header",
                          "selected_tof_rpc_hits"},
@@ -28,7 +28,7 @@ public:
 
     qa_manager->AddEntry2D({{"VTX_{X}, mm", "event_header", "vtx_x"},
                            {"VTX_{Y}, mm", "event_header", "vtx_y"}},
-                          {{100, -5.0, 5.0}, {100, -5.0, 5.0}});
+                          {{200, -10.0, 10.0}, {200, -10.0, 10.0}});
 
     qa_manager->AddEntry2D(
         {{"N hits META", "event_header", "selected_tof_rpc_hits"},
