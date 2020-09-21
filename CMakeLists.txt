@@ -10,6 +10,8 @@ list(APPEND CMAKE_PREFIX_PATH ${AnalysisTree_HOME})
 list(APPEND CMAKE_PREFIX_PATH ${AnalysisTreeQA_HOME})
 
 find_package(ROOT REQUIRED COMPONENTS RIO Tree)
+find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(ROOT REQUIRED)
 find_package(AnalysisTree REQUIRED)
 find_package(AnalysisTreeQA REQUIRED)
 
@@ -24,6 +26,7 @@ include_directories(
         ${AnalysisTree_INCLUDE_DIR}
         ${AnalysisTreeQA_INCLUDE_DIR}
         $ENV{HadesUtils_DIR}/include
+        ${Boost_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -34,5 +37,5 @@ link_directories(
 
 add_definitions(${ROOT_CXX_FLAGS})
 
-add_executable(run_qa src/quality_assurance.cc)
-target_link_libraries(run_qa ${ROOT_LIBRARIES} AnalysisTreeBase AnalysisTreeInfra AnalysisTreeQA $ENV{HadesUtils_DIR}/lib/libHadesUtils.so)
+add_executable(run_qa src/quality_assurance.cc src/branches_qa.cc)
+target_link_libraries(run_qa ${Boost_LIBRARIES}  ${ROOT_LIBRARIES} AnalysisTreeBase AnalysisTreeInfra AnalysisTreeQA $ENV{HadesUtils_DIR}/lib/libHadesUtils.so)
