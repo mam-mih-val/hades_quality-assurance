@@ -29,28 +29,26 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager) {
   qa_manager->AddH1({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {500, -4.0, 4.0}});
   qa_manager->AddH1({"geant pid", {"mdc_vtx_tracks", "geant_pid"}, {50, 0.0, 50.0}});
 
-  qa_manager->AddH1({"n hits all layers", {"mdc_vtx_tracks", "layers_total"}, {50, 0.0, 50.0}});
-  Variable fired_layers("firer_layers_in_stations",{{"mdc_vtx_tracks", "layers_0"},
+  qa_manager->AddH1({"n hits all layers", {"mdc_vtx_tracks", "layers_total"}, {25, 0.0, 25.0}});
+  Variable fired_layers("fired_layers_in_stations",{{"mdc_vtx_tracks", "layers_0"},
                                                     {"mdc_vtx_tracks", "layers_1"},
                                                     {"mdc_vtx_tracks", "layers_2"},
                                                     {"mdc_vtx_tracks", "layers_3"}}, [](const std::vector<double>& layers){
     return layers.at(0)*1e3+layers.at(1)*1e2+layers.at(2)*1e1+layers.at(3)*1e0;
   });
-  qa_manager->AddH1({"n hits 0 station", {"mdc_vtx_tracks", "layers_0"}, {50, 0.0, 50.0}});
-  qa_manager->AddH1({"n hits 1 station", {"mdc_vtx_tracks", "layers_1"}, {50, 0.0, 50.0}});
-  qa_manager->AddH1({"n hits 2 station", {"mdc_vtx_tracks", "layers_2"}, {50, 0.0, 50.0}});
-  qa_manager->AddH1({"n hits 3 station", {"mdc_vtx_tracks", "layers_3"}, {50, 0.0, 50.0}});
-  qa_manager->AddH1({"fired layers", fired_layers, {10000, 0.0, 1e4}});
+  qa_manager->AddH1({"n hits 0 station", {"mdc_vtx_tracks", "layers_0"}, {7, 0.0, 7.0}});
+  qa_manager->AddH1({"n hits 1 station", {"mdc_vtx_tracks", "layers_1"}, {7, 0.0, 7.0}});
+  qa_manager->AddH1({"n hits 2 station", {"mdc_vtx_tracks", "layers_2"}, {7, 0.0, 7.0}});
+  qa_manager->AddH1({"n hits 3 station", {"mdc_vtx_tracks", "layers_3"}, {7, 0.0, 7.0}});
+  qa_manager->AddH1({"fired layers", fired_layers, {6667, 0.0, 6667}});
 
-  Cuts *protons = new Cuts("protons",
-                           {SimpleCut({"mdc_vtx_tracks", "geant_pid"}, 14. - 0.5, 14. + 0.5)});
-  Variable charge_p(
+  Variable charged_p(
       "p_divide_z, [#frac{GeV}{c}]", {
           {"mdc_vtx_tracks", "charge"},
           {"mdc_vtx_tracks","p" }},
       [](std::vector<double> &var) { return var.at(1)/var.at(0); });
 
-  Variable y_cm("y-y_{beam}", {{"mdc_vtx_tracks", "rapidity"}},
+  Variable y_cm("y_cm", {{"mdc_vtx_tracks", "rapidity"}},
                 [](const std::vector<double> &vars){
                   return vars.at(0)-0.74;
                 });
@@ -66,37 +64,13 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager) {
 
   qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}});
-  qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
-                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}},
-                    protons);
   qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {250, 0.0, 2.5}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.0}});
   qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {275, 0.0, 5.5}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {250, 0.0, 2.5}},
-                    protons);
-  qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {275, 0.0, 5.5}},
-                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {250, 0.0, 2.5}},
                     protons_qvector);
-
-  qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
-                    {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {300, -15.0, 15.0}},
-                    protons);
-
-  qa_manager->AddH2({"#chi^{2}_{RK}", {"mdc_vtx_tracks", "chi2"}, {200, 0.0, 50.0}},
-                    {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {300, -15.0, 15.0}},
-                    protons);
-
-  qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
-                    {"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {350, -3.5, 3.5}},
-                    protons);
-
-  qa_manager->AddH2({"p/z, [#frac{GeV}{c^{2}}]", charge_p, {250, -2.0, 5.0}},
+  qa_manager->AddH2({"p/z, [#frac{GeV}{c^{2}}]", charged_p, {250, -2.0, 5.0}},
                     {"#frac{dE}{dx} MDC", {"mdc_vtx_tracks", "dEdx"}, {200, 0.0, 20.0}});
-
-  qa_manager->AddH2({"p/z, [#frac{GeV}{c^{2}}]", charge_p, {250, -2.0, 5.0}},
-                    {"#frac{dE}{dx} MDC", {"mdc_vtx_tracks", "dEdx"}, {200, 0.0, 20.0}},
-                    protons);
-
   Variable theta( "#theta, [rad]", {{"mdc_vtx_tracks", "eta"}},
                   []( const std::vector<double>& vars ){
                     auto eta = vars.at(0);
@@ -105,10 +79,6 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager) {
 
   qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
                     {"#theta [rad]", theta, {170, 0.0, 1.7}});
-
-  qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
-                    {"#theta [rad]", theta, {170, 0.0, 1.7}},
-                    protons);
 }
 
 void AddMetaHitsQA(QA::Task* qa_manager) {
@@ -116,41 +86,86 @@ void AddMetaHitsQA(QA::Task* qa_manager) {
   qa_manager->AddH1({"META match quality", {"meta_hits", "match_quality"}, {500, -10.0, 10.0}});
   qa_manager->AddH1({"beta, [#frac{1}{c}]", {"meta_hits", "beta"}, {500, 0.0, 1.5}});
   qa_manager->AddH1({"time, [ns]", {"meta_hits", "time_of_flight"}, {500, 0.0, 100.0}});
-
-  Cuts *protons = new Cuts("protons", {{{"mdc_vtx_tracks", "geant_pid"}, 14. - 0.5, 14. + 0.5}});
+  qa_manager->AddH1({"m^{2} META, #frac{GeV^{2}}{c^{4}}", {"meta_hits", "mass2"}, {550, -1.0, 10.0}});
 
   Variable charged_p(
-      "p_z", {{"mdc_vtx_tracks","charge"}, {"mdc_vtx_tracks","p"}},
+      "p_divide_z", {{"mdc_vtx_tracks","charge"}, {"mdc_vtx_tracks","p"}},
       [](std::vector<double> &var) { return var.at(1)/var.at(0); });
   Variable charged_pT(
-      "pT_z", {{"mdc_vtx_tracks","charge"}, {"mdc_vtx_tracks","pT"}},
+      "pT_divide_z", {{"mdc_vtx_tracks","charge"}, {"mdc_vtx_tracks","pT"}},
       [](std::vector<double> &var) { return var.at(1)/var.at(0); });
 
-  Variable sqrt_m2("mass META, [#frac{GeV}{c}^{2}]", {{"meta_hits", "mass2"}},
-                   [](std::vector<double> &var) { return sqrtf(var.at(0)); });
-  Variable charged_mass(
-      "m*z META, [z*#frac{GeV}{c}^{2}]", {
-          {"meta_hits","mass2"},
-          {"meta_hits", "charge"}},
-      [](std::vector<double> &var) { return sqrtf(var.at(0)) * var.at(1); });
-
-  qa_manager->AddH2({"p/z, [#frac{GeV}{c^{2}}]", charged_p, {200, -2.0, 5.0}},
+  qa_manager->AddH2({"p/z, [#frac{GeV}{c}]", charged_p, {250, -2.5, 5.0}},
                     {"#frac{dE}{dx} META", {"meta_hits", "dEdx"}, {200, 0.0, 20.0}});
-  qa_manager->AddH2({"p/z, [#frac{GeV}{c^{2}}]", charged_p, {200, -2.0, 5.0}},
-                    {"#frac{dE}{dx} META", {"meta_hits", "dEdx"}, {200, 0.0, 20.0}},
-                    protons);
 
-  qa_manager->AddH2({"p/z, [#frac{GeV}{c^{2}}]", charged_p, {250, -2.5, 5.0}},
+  qa_manager->AddH2({"p/z, [#frac{GeV}{c}]", charged_p, {250, -2.5, 5.0}},
                     {"#beta", {"meta_hits", "beta"}, {250, 0.0, 1.25}});
-  qa_manager->AddH2({"p/z, [#frac{GeV}{c^{2}}]", charged_p, {250, -2.5, 5.0}},
-                    {"#beta", {"meta_hits", "beta"}, {250, 0.0, 1.25}},
-                    protons);
 
-  qa_manager->AddH2({"p_{T}/z, [#frac{GeV}{c}]", charged_pT, {500, -2.5, 2.5}},
-                    {"m^{2} META, [#frac{GeV^{2}}{c}^{4}]", {"meta_hits", "mass2"}, {500, 0.0, 10.0}});
-  qa_manager->AddH2({"p_{T}/z, [#frac{GeV}{c}]", charged_pT, {500, -2.5, 2.5}},
-                    {"m^{2} META, [#frac{GeV^{2}}{c}^{4}]", {"meta_hits", "mass2"}, {500, 0.0, 10.0}},
-                    protons);
+  qa_manager->AddH2({"p_{T}/z, [#frac{GeV}{c}]", charged_pT, {250, -2.5, 2.5}},
+                    {"m^{2} META, [#frac{GeV^{2}}{c}^{4}]", {"meta_hits", "mass2"}, {550, -1.0, 10.0}});
+}
+
+void AddParticleQA(QA::Task* qa_manager, int pdg_code){
+  Cuts *particle = new Cuts(std::to_string(pdg_code), {SimpleCut({"mdc_vtx_tracks", "pid"}, pdg_code)});
+  Variable charged_p(
+      "p_divide_z", {
+          {"mdc_vtx_tracks", "charge"},
+          {"mdc_vtx_tracks","p" }},
+      [](std::vector<double> &var) { return var.at(1)/var.at(0); });
+  Variable charged_pT(
+      "pT_divide_z", {{"mdc_vtx_tracks","charge"}, {"mdc_vtx_tracks","pT"}},
+      [](std::vector<double> &var) { return var.at(1)/var.at(0); });
+
+  Variable y_cm("y_cm", {{"mdc_vtx_tracks", "rapidity"}},
+                [](const std::vector<double> &vars){
+                  return vars.at(0)-0.74;
+                });
+  Variable theta( "theta", {{"mdc_vtx_tracks", "eta"}},
+                  []( const std::vector<double>& vars ){
+                    auto eta = vars.at(0);
+                    return 2*atan( exp( -eta ) );
+                  } );
+  qa_manager->AddH1({"n hits all layers", {"mdc_vtx_tracks", "layers_total"}, {25, 0.0, 25.0}});
+  Variable fired_layers("fired_layers_in_stations",{{"mdc_vtx_tracks", "layers_0"},
+                                                    {"mdc_vtx_tracks", "layers_1"},
+                                                    {"mdc_vtx_tracks", "layers_2"},
+                                                    {"mdc_vtx_tracks", "layers_3"}}, [](const std::vector<double>& layers){
+    return layers.at(0)*1e3+layers.at(1)*1e2+layers.at(2)*1e1+layers.at(3)*1e0;
+  });
+  qa_manager->AddH1({"n hits 0 station", {"mdc_vtx_tracks", "layers_0"}, {7, 0.0, 7.0}}, particle);
+  qa_manager->AddH1({"n hits 1 station", {"mdc_vtx_tracks", "layers_1"}, {7, 0.0, 7.0}}, particle);
+  qa_manager->AddH1({"n hits 2 station", {"mdc_vtx_tracks", "layers_2"}, {7, 0.0, 7.0}}, particle);
+  qa_manager->AddH1({"n hits 3 station", {"mdc_vtx_tracks", "layers_3"}, {7, 0.0, 7.0}}, particle);
+  qa_manager->AddH1({"fired layers", fired_layers, {6667, 0.0, 6667}}, particle);
+
+  qa_manager->AddH1({"p_{T}, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {500, 0.0, 2.5}}, particle);
+  qa_manager->AddH1({"#beta, #frac{v}{c}", {"meta_hits", "beta"}, {500, 0.0, 1.25}}, particle);
+  qa_manager->AddH1({"m^{2} META, #frac{GeV^{2}}{c^{4}}", {"meta_hits", "mass2"}, {550, -1.0, 10.0}}, particle);
+
+  qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
+                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}},
+                    particle);
+  qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {275, 0.0, 5.5}},
+                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {250, 0.0, 2.5}},
+                    particle);
+  qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
+                    {"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {350, -3.5, 3.5}},
+                    particle);
+  qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
+                    {"#theta [rad]", theta, {170, 0.0, 1.7}},
+                    particle);
+  qa_manager->AddH2({"p/z, [#frac{GeV}{c}]", charged_p, {250, -2.5, 5.0}},
+                    {"#frac{dE}{dx} MDC", {"mdc_vtx_tracks", "dEdx"}, {200, 0.0, 20.0}},
+                    particle);
+  qa_manager->AddH2({"p/z, [#frac{GeV}{c}]", charged_p, {250, -2.5, 5.0}},
+                    {"#frac{dE}{dx} META", {"meta_hits", "dEdx"}, {200, 0.0, 20.0}},
+                    particle);
+  qa_manager->AddH2({"p/z, [#frac{GeV}{c}]", charged_p, {250, -2.5, 5.0}},
+                    {"#beta", {"meta_hits", "beta"}, {250, 0.0, 1.25}},
+                    particle);
+  qa_manager->AddH2({"p_{T}/z, [#frac{GeV}{c}]", charged_pT, {250, -2.5, 2.5}},
+                    {"m^{2} META, [#frac{GeV^{2}}{c}^{4}]", {"meta_hits", "mass2"}, {550, -1.0, 10.0}},
+                    particle);
 }
 
 void AddForwardWallHitsQA(QA::Task* qa_manager) {

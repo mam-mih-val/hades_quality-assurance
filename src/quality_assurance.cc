@@ -56,6 +56,11 @@ int main(int argv, char **argc){
   AnalysisTree::AddEventHeaderQA(qa_task);
   AnalysisTree::AddMdcVtxTracksQA(qa_task);
   AnalysisTree::AddMetaHitsQA(qa_task);
+  AnalysisTree::AddParticleQA(qa_task, 2212);
+  AnalysisTree::AddParticleQA(qa_task, 211);
+  AnalysisTree::AddParticleQA(qa_task, -211);
+  AnalysisTree::AddParticleQA(qa_task, 321);
+  AnalysisTree::AddParticleQA(qa_task, -321);
   AnalysisTree::AddForwardWallHitsQA(qa_task);
   if( is_mc )
     AnalysisTree::AddSimDataQA(qa_task);
