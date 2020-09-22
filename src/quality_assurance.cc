@@ -6,6 +6,7 @@
 
 #include <boost/program_options.hpp>
 
+#include <AnalysisTree/DataHeader.hpp>
 #include <cuts.h>
 
 #include "branches_qa.h"
@@ -40,6 +41,8 @@ int main(int argv, char **argc){
 
   if( std::empty(input_list) )
     throw std::runtime_error( "Input file is not specified. Try ./run_qa --help for more information" );
+  const double beam_y = AnalysisTree::GetObjectFromFileList<AnalysisTree::DataHeader>(
+      input_list, "DataHeader")->GetBeamRapidity();
   AnalysisTree::QA::Manager qa_manager({input_list}, {"hades_analysis_tree"});
   qa_manager.SetOutFileName(output_file);
   auto* qa_task = new AnalysisTree::QA::Task;
@@ -54,16 +57,16 @@ int main(int argv, char **argc){
 //                                                HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
 
   AnalysisTree::AddEventHeaderQA(qa_task);
-  AnalysisTree::AddMdcVtxTracksQA(qa_task);
+  AnalysisTree::AddMdcVtxTracksQA(qa_task, beam_y);
   AnalysisTree::AddMetaHitsQA(qa_task);
-  AnalysisTree::AddParticleQA(qa_task, 2212);
-  AnalysisTree::AddParticleQA(qa_task, 211);
-  AnalysisTree::AddParticleQA(qa_task, -211);
-  AnalysisTree::AddParticleQA(qa_task, 321);
-  AnalysisTree::AddParticleQA(qa_task, -321);
+  AnalysisTree::AddParticleQA(qa_task, 2212, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, 211, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, -211, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, 321, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, -321, beam_y);
   AnalysisTree::AddForwardWallHitsQA(qa_task);
   if( is_mc )
-    AnalysisTree::AddSimDataQA(qa_task);
+    AnalysisTree::AddSimDataQA(qa_task, beam_y);
 
   qa_manager.AddTask(qa_task);
   qa_manager.Init();

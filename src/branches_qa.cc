@@ -21,7 +21,7 @@ void AddEventHeaderQA(QA::Task* qa_manager) {
                     {"selected MDC hits", {"event_header", "selected_mdc_tracks"}, {100, 0.0, 100.0}});
 }
 
-void AddMdcVtxTracksQA(QA::Task* qa_manager) {
+void AddMdcVtxTracksQA(QA::Task* qa_manager, double beam_y) {
   qa_manager->AddH1({"Vertex tracks p_{T}, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {500, 0.0, 2.5}});
   qa_manager->AddH1({"#chi^{2}_{RK}", {"mdc_vtx_tracks", "chi2"}, {300, 0.0, 150.0}});
   qa_manager->AddH1({"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {500, -15.0, 15.0}});
@@ -49,8 +49,8 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager) {
       [](std::vector<double> &var) { return var.at(1)/var.at(0); });
 
   Variable y_cm("y_cm", {{"mdc_vtx_tracks", "rapidity"}},
-                [](const std::vector<double> &vars){
-                  return vars.at(0)-0.74;
+                [beam_y](const std::vector<double> &vars){
+                  return vars.at(0)-beam_y/2;
                 });
   Variable z( "DCA_z_VTX_z", {{"mdc_vtx_tracks", "dca_z"}, {"event_header", "vtx_z"}}, [](const std::vector<double>& vars){
     return vars.at(0)+vars.at(1);
@@ -105,7 +105,7 @@ void AddMetaHitsQA(QA::Task* qa_manager) {
                     {"m^{2} META, [#frac{GeV^{2}}{c}^{4}]", {"meta_hits", "mass2"}, {550, -1.0, 10.0}});
 }
 
-void AddParticleQA(QA::Task* qa_manager, int pdg_code){
+void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
   Cuts *particle = new Cuts(std::to_string(pdg_code), {SimpleCut({"mdc_vtx_tracks", "pid"}, pdg_code)});
   Variable charged_p(
       "p_divide_z", {
@@ -117,8 +117,8 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code){
       [](std::vector<double> &var) { return var.at(1)/var.at(0); });
 
   Variable y_cm("y_cm", {{"mdc_vtx_tracks", "rapidity"}},
-                [](const std::vector<double> &vars){
-                  return vars.at(0)-0.74;
+                [beam_y](const std::vector<double> &vars){
+                  return vars.at(0)-beam_y/2;
                 });
   Variable theta( "theta", {{"mdc_vtx_tracks", "eta"}},
                   []( const std::vector<double>& vars ){
@@ -145,7 +145,7 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code){
   qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}},
                     particle);
-  qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {275, 0.0, 5.5}},
+  qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {250, 0.0, 2.5}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {250, 0.0, 2.5}},
                     particle);
   qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
@@ -218,7 +218,7 @@ void AddForwardWallHitsQA(QA::Task* qa_manager) {
                     {"module Y, mm", {"forward_wall_hits", "y"}, {100, -1000.0, 1000.0}}, perip_modules);
 }
 
-void AddSimDataQA(QA::Task* qa_manager) {
+void AddSimDataQA(QA::Task* qa_manager, double beam_y) {
   qa_manager->AddH1({"b, fm", {"sim_header", "impact_parameter"}, {110, 0.0, 11.0}});
   qa_manager->AddH1({"#Psi_{RP}, rad", {"sim_header", "reaction_plane"}, {500, 0.0, 6.29}});
 
@@ -230,12 +230,12 @@ void AddSimDataQA(QA::Task* qa_manager) {
                             {{"sim_tracks", "is_primary"}, 1. - 0.5, 1. + 0.5}});
 
   Variable gen_y_cm("gen_y_{cm}", {{"sim_tracks", "rapidity"}},
-                    [](const std::vector<double> &vars){
-                      return vars.at(0)-0.74;
+                    [beam_y](const std::vector<double> &vars){
+                      return vars.at(0)-beam_y/2;
                     });
   Variable reco_y_cm("y_{cm}", {{"mdc_vtx_tracks", "rapidity"}},
-                     [](const std::vector<double> &vars){
-                       return vars.at(0)-0.74;
+                     [beam_y](const std::vector<double> &vars){
+                       return vars.at(0)-beam_y/2;
                      });
   Variable rapidity_error("rapidity_error", {{"sim_tracks", "rapidity"},
                                              {"mdc_vtx_tracks", "rapidity"}},
@@ -255,24 +255,18 @@ void AddSimDataQA(QA::Task* qa_manager) {
                     {"pt_{p}, #frac{GeV}{c}", {"sim_tracks", "pT"}, {200, 0.0, 2.0}}, protons);
 
   qa_manager->AddH2({"GEN y_{cm}", gen_y_cm, {200, -1.0, 1.0}},
-                    {"RECO y_{cm}", reco_y_cm, {200, -1.0, 1.0}}, midrapidity_protons);
+                    {"RECO y_{cm}", reco_y_cm, {200, -1.0, 1.0}}, protons);
 
   qa_manager->AddH2({"GEN p [GeV/c]", {"sim_tracks", "p"}, {300, 0.0, 3.0}},
-                    {"RECO p [GeV/c]", {"mdc_vtx_tracks", "p"}, {300, 0.0, 3.0}}, midrapidity_protons);
+                    {"RECO p [GeV/c]", {"mdc_vtx_tracks", "p"}, {300, 0.0, 3.0}}, protons);
 
   qa_manager->AddH2({"GEN p_{T} [GeV/c]", {"sim_tracks", "pT"}, {200, 0.0, 2.0}},
-                    {"RECO p_{T} [GeV/c]", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.0}}, midrapidity_protons);
+                    {"RECO p_{T} [GeV/c]", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.0}}, protons);
 
   qa_manager->AddH2({"GEN #varphi [GeV/c]", {"sim_tracks", "phi"}, {315, -3.15, 3.15}},
-                    {"RECO #varphi [GeV/c]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},midrapidity_protons);
+                    {"RECO #varphi [GeV/c]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},protons);
 
   qa_manager->AddProfile({"GEN p, [GeV/c]", {"sim_tracks", "p"}, {150, 0.0, 3.0}},
                          {"#frac{|p_{g}-p_{r}|}{p_{g}}, (%)", momentum_resolution, {100, 0.0, 100.5}}, protons);
-
-  qa_manager->AddProfile({"RECO p_{T}, [GeV/c]", {"mdc_vtx_tracks", "pT"}, {16, 0.0, 1.6}},
-                         {"y_{RECO}-y_{GEN}", rapidity_error, {500, -0.5, 0.5}}, midrapidity_protons);
-
-  qa_manager->AddProfile({"GEN p_{T}, [GeV/c]", {"sim_tracks", "pT"}, {16, 0.0, 1.6}},
-                         {"y_{RECO}-y_{GEN}", rapidity_error, {500, -0.5, 0.5}}, midrapidity_protons);
 }
 }
