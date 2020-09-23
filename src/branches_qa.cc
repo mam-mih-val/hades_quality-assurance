@@ -50,7 +50,7 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager, double beam_y) {
 
   Variable y_cm("y_cm", {{"mdc_vtx_tracks", "rapidity"}},
                 [beam_y](const std::vector<double> &vars){
-                  return vars.at(0)-beam_y/2;
+                  return vars.at(0)-beam_y;
                 });
   Variable z( "DCA_z_VTX_z", {{"mdc_vtx_tracks", "dca_z"}, {"event_header", "vtx_z"}}, [](const std::vector<double>& vars){
     return vars.at(0)+vars.at(1);
@@ -118,7 +118,7 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
 
   Variable y_cm("y_cm", {{"mdc_vtx_tracks", "rapidity"}},
                 [beam_y](const std::vector<double> &vars){
-                  return vars.at(0)-beam_y/2;
+                  return vars.at(0)-beam_y;
                 });
   Variable theta( "theta", {{"mdc_vtx_tracks", "eta"}},
                   []( const std::vector<double>& vars ){
@@ -231,11 +231,11 @@ void AddSimDataQA(QA::Task* qa_manager, double beam_y) {
 
   Variable gen_y_cm("gen_y_{cm}", {{"sim_tracks", "rapidity"}},
                     [beam_y](const std::vector<double> &vars){
-                      return vars.at(0)-beam_y/2;
+                      return vars.at(0)-beam_y;
                     });
   Variable reco_y_cm("y_{cm}", {{"mdc_vtx_tracks", "rapidity"}},
                      [beam_y](const std::vector<double> &vars){
-                       return vars.at(0)-beam_y/2;
+                       return vars.at(0)-beam_y;
                      });
   Variable rapidity_error("rapidity_error", {{"sim_tracks", "rapidity"},
                                              {"mdc_vtx_tracks", "rapidity"}},
