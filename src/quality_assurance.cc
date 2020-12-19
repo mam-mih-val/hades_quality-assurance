@@ -46,16 +46,18 @@ int main(int argv, char **argc){
   AnalysisTree::QA::Manager qa_manager({input_list}, {"hades_analysis_tree"});
   qa_manager.SetOutFileName(output_file);
   auto* qa_task = new AnalysisTree::QA::Task;
-
-//  qa_manager.SetEventCuts(HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::EVENT_HEADER,
-//                                                HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
+  auto event_cuts = new AnalysisTree::Cuts("evt_cuts", {
+                                                           AnalysisTree::SimpleCut( {"event_header", "vtx_z"}, -70.0, -10.0 ),
+                                                           AnalysisTree::SimpleCut( {"event_header", "selected_mdc_tracks"}, 2.0, 999.0 )
+                                                       });
 //  qa_manager.AddBranchCut(HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::WALL_HITS,
 //                                                HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
-//  qa_manager.AddBranchCut(HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::MDC_TRACKS,
-//                                                HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
+  qa_manager.AddBranchCut(HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::MDC_TRACKS,
+                                                HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
 //  qa_manager.AddBranchCut(HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::META_HITS,
 //                                                HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
 
+  qa_manager.SetEventCuts(event_cuts);
   AnalysisTree::AddEventHeaderQA(qa_task);
   AnalysisTree::AddMdcVtxTracksQA(qa_task, beam_y);
   AnalysisTree::AddMetaHitsQA(qa_task);
@@ -67,7 +69,6 @@ int main(int argv, char **argc){
   AnalysisTree::AddForwardWallHitsQA(qa_task);
   if( is_mc )
     AnalysisTree::AddSimDataQA(qa_task, beam_y);
-
   qa_manager.AddTask(qa_task);
   qa_manager.Init();
   qa_manager.Run(n_events);
