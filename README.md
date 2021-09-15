@@ -23,9 +23,13 @@ Source root environment
 ```
   source /path/to/root/install/bin/thisroot.sh
 ``` 
-Export AnalysisTree library
+Export AnalysisTree library (see https://github.com/HeavyIonAnalysis/AnalysisTree)
 ```
   export AnalysisTree_DIR=/path/to/AnalysisTree/install/lib/cmake/AnalysisTree/
+```
+Export AnalysisTreeQA library (see https://github.com/HeavyIonAnalysis/AnalysisTreeQA)
+```
+  export AnalysisTreeQA_DIR=/path/to/AnalysisTreeQA/install/lib/cmake/AnalysisTreeQA/
 ```
 Build the project
 ```
