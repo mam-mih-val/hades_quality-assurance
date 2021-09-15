@@ -11,8 +11,8 @@ set(CMAKE_CXX_FLAGS "-Wall")
 include(${ROOT_USE_FILE})
 
 include_directories(
-#        ${CMAKE_SOURCE_DIR}
-#        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src
         ${Boost_INCLUDE_DIRS}
         ${ROOT_INCLUDE_DIRS}
         ${AnalysisTree_INCLUDE_DIR}
