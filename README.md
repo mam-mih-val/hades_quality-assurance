@@ -6,6 +6,7 @@ QA for HADES data in AnalysisTree format
 * CMake 3.15
 * ROOT v6-20-04 built with C++17
 * AnalysisTree built with C++17 (see https://docs.google.com/document/d/1ztejoeJ45Aqdgq3a4m1DXTg4A1hUR3SDqk4ybYkboLA/edit for instructions)
+* AnalysisTreeQA built with C++17 (see https://github.com/HeavyIonAnalysis/AnalysisTreeQA for instructions)
 
 # Building
 
