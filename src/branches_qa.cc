@@ -123,9 +123,6 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager, double beam_y) {
   qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
                     {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {200, -15.0, 15.0}});
   qa_manager->AddH1({"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}});
-  Cuts *protons_qvector = new Cuts("qvector_se",
-                                   {SimpleCut({"mdc_vtx_tracks", "geant_pid"}, 14. - 0.5, 14. + 0.5),
-                                    SimpleCut({y_cm}, [](std::vector<double> var){return 0.33 < fabs(var.at(0)) && fabs(var.at(0)) < 0.55;})});
   Cuts *protons_pions = new Cuts("pions_protons",
                                  {SimpleCut({{"mdc_vtx_tracks", "pid"}}, [](std::vector<double> pid){
                                    return

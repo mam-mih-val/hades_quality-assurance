@@ -10,8 +10,6 @@
 #include "AnalysisTree/Variable.hpp"
 #include <AnalysisTree/Cuts.hpp>
 
-#include <centrality.h>
-
 namespace AnalysisTree{
 
 void AddEventHeaderQA(QA::Task* qa_manager, bool is_mc=false);

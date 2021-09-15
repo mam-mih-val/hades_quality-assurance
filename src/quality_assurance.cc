@@ -7,7 +7,6 @@
 #include <boost/program_options.hpp>
 
 #include <AnalysisTree/DataHeader.hpp>
-#include <cuts.h>
 
 #include "branches_qa.h"
 
@@ -68,9 +67,9 @@ int main(int argv, char **argc){
                                                            AnalysisTree::SimpleCut( {"event_header", "selected_tof_rpc_hits_centrality"}, 0.0, 45.0 ),
                                                        });
   if( is_cuts && !is_reco_fw ) {
-    qa_manager.AddBranchCut(
-        HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::WALL_HITS,
-                              HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
+//    qa_manager.AddBranchCut(
+//        HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::WALL_HITS,
+//                              HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
 //    qa_manager.AddBranchCut(
 //        HadesUtils::Cuts::Get(HadesUtils::Cuts::BRANCH_TYPE::MDC_TRACKS,
 //                              HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
