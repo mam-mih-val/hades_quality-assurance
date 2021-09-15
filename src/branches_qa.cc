@@ -32,6 +32,9 @@ void AddEventHeaderQA(QA::Task* qa_manager, bool is_mc) {
                     {"VTX_{y}, mm", {"event_header", "vtx_y"}, {250, -10.0, 10.0}});
 
   qa_manager->AddH2({"selected META hits", {"event_header", "selected_tof_rpc_hits"}, {250, 0.0, 250.0}},
+                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}});
+
+  qa_manager->AddH2({"selected META hits", {"event_header", "selected_tof_rpc_hits"}, {250, 0.0, 250.0}},
                     {"selected MDC tracks", {"event_header", "selected_mdc_tracks"}, {100, 0.0, 100.0}});
 
   qa_manager->AddH2({"selected TOF hits", {"event_header", "selected_tof_hits"}, {100, 0.0, 100.0}},
@@ -123,46 +126,15 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager, double beam_y) {
   qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
                     {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {200, -15.0, 15.0}});
   qa_manager->AddH1({"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}});
-  Cuts *protons_pions = new Cuts("pions_protons",
-                                 {SimpleCut({{"mdc_vtx_tracks", "pid"}}, [](std::vector<double> pid){
-                                   return
-                                       fabs(pid.at(0) - 2212) < 0.1 ||
-                                       fabs(pid.at(0) - 211) < 0.1 ||
-                                       fabs(pid.at(0) + 211) < 0.1;})});
-  Cuts *light_nuclei = new Cuts("light_nuclei",
-                                 {SimpleCut({{"mdc_vtx_tracks", "geant_pid"}}, [](std::vector<double> pid){
-                                   return
-                                       fabs(pid.at(0) - 45) < 0.1 ||
-                                       fabs(pid.at(0) - 46) < 0.1 ||
-                                       fabs(pid.at(0) - 47) < 0.1 ||
-                                       fabs(pid.at(0) - 49) < 0.1;})});
-  Variable protonidity(
-      "protonidity", {{"mdc_vtx_tracks","p"}, {"mdc_vtx_tracks","pz"}},
-      [](std::vector<double> &var) {
-        auto E = sqrt( var.at(0)*var.at(0) + 0.938*0.938 );
-        auto y = 0.5*( log( E + var.at(1) ) - log( E - var.at(1) ) ) - 0.74;
-        return y; });
 
   qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}});
-  qa_manager->AddH2({"y{p}", protonidity, {200, -1.0, 1.0}},
-                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}});
-  qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
-                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}}, protons_pions);
-  qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
-                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}}, light_nuclei);
   qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {250, 0.0, 2.5}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.0}});
   qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {250, 0.0, 2.5}},
                     {"p, #frac{GeV}{c}", {"mdc_vtx_tracks", "p"}, {250, 0.0, 5.0}});
   qa_manager->AddH2({"p, #frac{GeV}{c}", {"mdc_vtx_tracks", "p"}, {250, 0.0, 5.0}},
                     {"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}});
-  qa_manager->AddH2({"p, #frac{GeV}{c}", {"mdc_vtx_tracks", "p"}, {250, 0.0, 5.0}},
-                    {"#eta", {"mdc_vtx_tracks", "eta"}, {250, 0.0, 2.5}},
-                    light_nuclei);
-  qa_manager->AddH2({"p, #frac{GeV}{c}", {"mdc_vtx_tracks", "p"}, {250, 0.0, 5.0}},
-                    {"#eta", {"mdc_vtx_tracks", "eta"}, {250, 0.0, 2.5}},
-                    protons_pions);
 //  qa_manager->AddH2({"#eta", {"mdc_vtx_tracks", "eta"}, {275, 0.0, 5.5}},
 //                    {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {250, 0.0, 2.5}},
 //                    protons_qvector);
@@ -208,13 +180,6 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
     double hi;
     double lo;
   };
-  Cuts *analysis_ycm = new Cuts("analysis_ycm_"+std::to_string(pdg_code),
-                                {SimpleCut({{"mdc_vtx_tracks", "rapidity"},
-                                            {"mdc_vtx_tracks", "pid"}},
-                                           [pdg_code](std::vector<double> var){
-                                  return  -0.75 < var.at(0)-0.74 &&
-                                                   var.at(0)-0.74 < 0.75
-                                                 && fabs(var.at(1)-pdg_code)<0.1;})});
   std::map<int, axis> m2_axes_map{
       {2212, {200, 0.5, 1.5}},
       {211, {300, -0.05, 0.1}},
@@ -245,8 +210,6 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
   qa_manager->AddH2({"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}},
                     {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {200, -15.0, 15.0}}, particle);
   qa_manager->AddH1({"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}}, particle);
-  qa_manager->AddH1({"#eta", {"mdc_vtx_tracks", "eta"}, {440, 0.0, 2.2}}, analysis_ycm);
-  qa_manager->AddH1({"#theta", theta, {180, 0.0, 90.0}}, analysis_ycm);
 
   Variable charged_p(
       "p_divide_z", {
