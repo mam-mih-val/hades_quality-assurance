@@ -6,6 +6,7 @@ QA for HADES data in AnalysisTree format
 * CMake 3.15
 * ROOT v6-20-04 built with C++17
 * AnalysisTree built with C++17 (see https://docs.google.com/document/d/1ztejoeJ45Aqdgq3a4m1DXTg4A1hUR3SDqk4ybYkboLA/edit for instructions)
+* AnalysisTreeQA built with C++17 (see https://github.com/HeavyIonAnalysis/AnalysisTreeQA for instructions)
 
 # Building
 
@@ -23,9 +24,13 @@ Source root environment
 ```
   source /path/to/root/install/bin/thisroot.sh
 ``` 
-Export AnalysisTree library
+Export AnalysisTree library (see https://github.com/HeavyIonAnalysis/AnalysisTree)
 ```
   export AnalysisTree_DIR=/path/to/AnalysisTree/install/lib/cmake/AnalysisTree/
+```
+Export AnalysisTreeQA library (see https://github.com/HeavyIonAnalysis/AnalysisTreeQA)
+```
+  export AnalysisTreeQA_DIR=/path/to/AnalysisTreeQA/install/lib/cmake/AnalysisTreeQA/
 ```
 Build the project
 ```
