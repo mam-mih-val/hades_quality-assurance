@@ -19,7 +19,8 @@ echo >> list.txt
 
 source /etc/profile.d/modules.sh
 module use /cvmfs/it.gsi.de/modulefiles/
-module load compiler/gcc/9
+module load compiler/gcc/9.1.0
+module load boost/1.71.0_gcc9.1.0
 
 echo "loading " $ownroot
 source $ownroot
