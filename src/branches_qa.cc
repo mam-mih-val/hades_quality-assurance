@@ -126,6 +126,8 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager, double beam_y) {
   qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
                     {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {200, -15.0, 15.0}});
   qa_manager->AddH1({"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}});
+  qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
+                    {"DCA_{Z}", {"mdc_vtx_tracks", "dca_z"}, {200, -15.0, 15.0}});
 
   qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}});
@@ -207,6 +209,10 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
   } );
   qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
                     {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {200, -15.0, 15.0}}, particle);
+  qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
+                    {"DCA_{Z}", {"mdc_vtx_tracks", "dca_z"}, {200, -15.0, 15.0}}, particle);
+  qa_manager->AddH2({"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}},
+                    {"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}}, particle);
   qa_manager->AddH2({"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}},
                     {"DCA_{xy}", {"mdc_vtx_tracks", "dca_xy"}, {200, -15.0, 15.0}}, particle);
   qa_manager->AddH1({"DCA_{z}+VTX_{z}", z, {500, -100.0, 20.0}}, particle);
