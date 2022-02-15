@@ -4,8 +4,8 @@ n_files=$1
 file_list=$2
 output_dir=$3
 
-partition=main
-time=8:00:00
+partition=debug
+time=0:20:00
 build_dir=/lustre/hades/user/mmamaev/hades_quality_assurance/build/
 
 lists_dir=${output_dir}/lists/
