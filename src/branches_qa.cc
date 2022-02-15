@@ -70,7 +70,7 @@ void AddEventHeaderQA(QA::Task* qa_manager, bool is_mc) {
 }
 
 void AddMdcVtxTracksQA(QA::Task* qa_manager, double beam_y) {
-  Variable theta( "theta", {{"mdc_vtx_tracks", "eta"}},
+  Variable theta( "rec_theta", {{"mdc_vtx_tracks", "eta"}},
                   []( const std::vector<double>& vars ){
                     auto eta = vars.at(0);
                     return 2*atan( exp( -eta ) );
@@ -188,7 +188,7 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
       {321, {200, 0.0, 1.0}},
       {-321, {200, 0.0, 1.0}},
   };
-  Variable theta( "theta", {{"mdc_vtx_tracks", "eta"}},
+  Variable theta( "rec_theta", {{"mdc_vtx_tracks", "eta"}},
                   []( const std::vector<double>& vars ){
                     auto eta = vars.at(0);
                     return 2*atan( exp( -eta ) );
@@ -578,7 +578,7 @@ void AddSimDataQA(QA::Task* qa_manager, double beam_y) {
                 [beam_y](const std::vector<double> &vars){
                   return vars.at(0)-beam_y;
                 });
-  Variable theta( "theta", {{"sim_tracks", "eta"}},
+  Variable theta( "tru_theta", {{"sim_tracks", "eta"}},
                   []( const std::vector<double>& vars ){
                     auto eta = vars.at(0);
                     return 2*atan( exp( -eta ) );
@@ -698,7 +698,7 @@ void AddSimParticlesQA(QA::Task* qa_manager, int pdg_code, double beam_y){
                 [beam_y](const std::vector<double> &vars){
                   return vars.at(0)-beam_y;
                 });
-  Variable theta( "theta", {{"sim_tracks", "eta"}},
+  Variable theta( "tru_theta", {{"sim_tracks", "eta"}},
                   []( const std::vector<double>& vars ){
                     auto eta = vars.at(0);
                     return 2*atan( exp( -eta ) );
