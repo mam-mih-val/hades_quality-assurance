@@ -684,8 +684,8 @@ void AddSimDataQA(QA::Task* qa_manager, double beam_y) {
                     {"#phi, [rad]", {"sim_tracks", "phi"}, {350, -3.5, 3.5}});
   qa_manager->AddH2({"#phi, [rad]", {"sim_tracks", "phi"}, {315, -3.15, 3.15}},
                     {"#theta [rad]", theta, {170, 0.0, 1.7}});
-  qa_manager->AddH2({"p, #frac{GeV}{c}", {"mdc_vtx_tracks", "p"}, {250, 0.0, 5.0}},
-                    {"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}});
+  qa_manager->AddH2({"p, #frac{GeV}{c}", {"sim_tracks", "p"}, {250, 0.0, 5.0}},
+                    {"#phi, [rad]", {"sim_tracks", "phi"}, {315, -3.15, 3.15}});
 }
 
 void AddSimParticlesQA(QA::Task* qa_manager, int pdg_code, double beam_y){
