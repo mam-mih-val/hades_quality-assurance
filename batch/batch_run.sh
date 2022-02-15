@@ -12,20 +12,10 @@ cd $output_dir
 mkdir -p $job_num
 cd $job_num
 
-while read line; do
-    echo $line >> list.txt
-done < $filelist
-echo >> list.txt
-
-source /etc/profile.d/modules.sh
-module use /cvmfs/it.gsi.de/modulefiles/
-module load compiler/gcc/9.1.0
-module load boost/1.71.0_gcc9.1.0
-
-echo "loading " $ownroot
-source $ownroot
+echo "loading /lustre/nyx/hades/user/mmamaev/install/root-6.20.04-centos7-cxx17/bin/thisroot.sh"
+. /lustre/nyx/hades/user/mmamaev/install/root-6.20.04-centos7-cxx17/bin/thisroot.sh
 
 echo "executing $build_dir/run_qa -i list.txt -o output.root --tree-name hades_analysis_tree"
-$build_dir/run_qa -i list.txt -o output.root --tree-name hades_analysis_tree
+$build_dir/run_qa -i $filelist -o output.root --tree-name hades_analysis_tree -m
 
 echo JOB FINISHED!
