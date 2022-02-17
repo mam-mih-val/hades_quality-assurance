@@ -6,7 +6,6 @@ output_dir=$3
 
 partition=debug
 time=0:20:00
-build_dir=/lustre/hades/user/mmamaev/hades_quality_assurance/build/
 
 lists_dir=${output_dir}/lists/
 log_dir=${output_dir}/log
@@ -35,10 +34,10 @@ sbatch --wait \
       -a $job_range \
       -e ${log_dir}/%A_%a.e \
       -o ${log_dir}/%A_%a.o \
-      --export=output_dir=$output_dir,file_list=$file_list,lists_dir=$lists_dir,build_dir=$build_dir \
+      --export=output_dir=$output_dir,file_list=$file_list,lists_dir=$lists_dir \
       -- /lustre/hades/user/mmamaev/hades_quality_assurance/batch/batch_run.sh
 
-source /lustre/nyx/hades/user/mmamaev/install/root-6.20.04-centos7-cxx17/bin/thisroot.sh
+source /lustre/hades/user/mmamaev/install/root-6.18.04-debian10-cxx17/bin/thisroot.sh
 
 hadd -j -f $output_dir/qa_all.root $output_dir/*/output.root >& $log_dir/log_merge.txt
 

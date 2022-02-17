@@ -12,8 +12,10 @@ cd $output_dir
 mkdir -p $job_num
 cd $job_num
 
-echo "loading /lustre/nyx/hades/user/mmamaev/install/root-6.20.04-centos7-cxx17/bin/thisroot.sh"
-. /lustre/nyx/hades/user/mmamaev/install/root-6.20.04-centos7-cxx17/bin/thisroot.sh
+build_dir=/lustre/hades/user/mmamaev/hades_quality_assurance/build-deb10/
+
+echo "loading /lustre/hades/user/mmamaev/install/root-6.18.04-debian10-cxx17/bin/thisroot.sh"
+. /lustre/hades/user/mmamaev/install/root-6.18.04-debian10-cxx17/bin/thisroot.sh
 
 echo "executing $build_dir/run_qa -N 1000 -i $filelist -o output.root --tree-name hades_analysis_tree -m"
 $build_dir/run_qa -N 1000 \
