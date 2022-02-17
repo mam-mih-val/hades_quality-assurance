@@ -91,7 +91,8 @@ int main(int argv, char **argc){
     AnalysisTree::AddParticleQA(qa_task, -11, beam_y);
 //    AnalysisTree::AddParticleQA(qa_task, 45, beam_y);
 //    AnalysisTree::AddParticleQA(qa_task, 46, beam_y);
-    AnalysisTree::AddForwardWallHitsQA(qa_task);
+    if( !is_mc )
+      AnalysisTree::AddForwardWallHitsQA(qa_task);
   }
   if( is_reco_fw ) {
     auto branch="reconstructed_forward_wall_hits";
