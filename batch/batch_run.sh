@@ -18,7 +18,7 @@ echo "loading /lustre/hades/user/mmamaev/install/root-6.18.04-debian10-cxx17/bin
 . /lustre/hades/user/mmamaev/install/root-6.18.04-debian10-cxx17/bin/thisroot.sh
 
 echo "executing $build_dir/run_qa -N 1000 -i $filelist -o output.root --tree-name hades_analysis_tree -m"
-$build_dir/run_qa -N 1000 \
+$build_dir/run_qa -N 10000 \
                 -i $filelist \
                 -o output.root \
                 --tree-name hades_analysis_tree \

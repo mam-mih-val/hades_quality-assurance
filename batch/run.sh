@@ -43,9 +43,9 @@ hadd -j -f $output_dir/qa_all.root $output_dir/*/output.root >& $log_dir/log_mer
 
 out_file_name=QA_`basename $output_dir`.root
 
-cp $output_dir/correlation_all.root ~/Correlations/$out_file_name
+cp $output_dir/qa_all.root ~/Correlations/$out_file_name
 
 echo Merging finished. Merging log is availible in
 echo $log_dir/log_merge.txt
 echo
-echo output file name: $output_dir
+echo output file name: $out_file_name
