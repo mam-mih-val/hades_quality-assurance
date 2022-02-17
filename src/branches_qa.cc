@@ -132,6 +132,12 @@ void AddMdcVtxTracksQA(QA::Task* qa_manager, double beam_y) {
                     {"#theta [rad]", theta, {170, 0.0, 1.7}});
   qa_manager->AddH2({"#theta [rad]", theta, {170, 0.0, 1.7}},
                     {"pt, #frac{GeV}{c}", {"mdc_vtx_tracks", "pT"}, {200, 0.0, 2.5}});
+
+  Cuts *pT_04 = new Cuts("pT_gt_04", {SimpleCut({"mdc_vtx_tracks", "pT"}, 0.4, 2.0)});
+  qa_manager->AddH2({"#theta", theta, {180, 0.0, 1.7}},
+                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}});
+  qa_manager->AddH2({"#theta", theta, {180, 0.0, 1.7}},
+                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}}, pT_04);
 }
 
 void AddMetaHitsQA(QA::Task* qa_manager) {
@@ -201,11 +207,6 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
           {"mdc_vtx_tracks", "charge"},
           {"mdc_vtx_tracks","p" }},
       [](std::vector<double> &var) { return var.at(1)/var.at(0); });
-  Variable mT_pT(
-      "mT_divide_pT", {
-          {"mdc_vtx_tracks", "pT"},
-          {"mdc_vtx_tracks","mass"}},
-      [](std::vector<double> &var) { return sqrt(var.at(0)*var.at(0)+var.at(1)*var.at(1))/var.at(0); });
 
   Variable charged_m2(
       "m2_times_z", {{"mdc_vtx_tracks","charge"}, {"meta_hits","mass2"}},
@@ -273,6 +274,16 @@ void AddParticleQA(QA::Task* qa_manager, int pdg_code, double beam_y){
                     particle);
   qa_manager->AddH2({"p, #frac{GeV}{c}", {"mdc_vtx_tracks", "p"}, {250, 0.0, 5.0}},
                     {"#phi, [rad]", {"mdc_vtx_tracks", "phi"}, {315, -3.15, 3.15}}, particle);
+
+  Cuts *pT_04 = new Cuts("pT_gt_04_"+std::to_string( pdg_code ), {
+                                                                     SimpleCut( {"mdc_vtx_tracks", "pT"}, 0.4, 2.0),
+                                                                     SimpleCut( {"mdc_vtx_tracks", "pid"}, pdg_code),
+                                                                 });
+  qa_manager->AddH2({"#theta", theta, {180, 0.0, 1.7}},
+                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}}, particle);
+  qa_manager->AddH2({"#theta", theta, {180, 0.0, 1.7}},
+                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}},
+                    pT_04);
 }
 
 void AddForwardWallHitsQA(QA::Task* qa_manager, bool is_mc) {
@@ -610,8 +621,6 @@ void AddSimParticlesQA(QA::Task* qa_manager, int pdg_code, double beam_y){
                               return res;
                           } );
 
-  qa_manager->AddH2({"#theta", theta, {180, 0.0, 1.7}},
-                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}}, particle);
   qa_manager->AddH2({"y-y_{cm}", y_cm, {200, -1.0, 1.0}},
                     {"pt, #frac{GeV}{c}", {"sim_tracks", "pT"}, {200, 0.0, 2.5}},
                     particle);
@@ -641,6 +650,15 @@ void AddSimParticlesQA(QA::Task* qa_manager, int pdg_code, double beam_y){
                     particle);
   qa_manager->AddH2({"p, #frac{GeV}{c}", {"sim_tracks", "p"}, {250, 0.0, 5.0}},
                     {"#phi, [rad]", {"sim_tracks", "phi"}, {315, -3.15, 3.15}}, particle);
+  Cuts *pT_04 = new Cuts("pT_gt_04_"+std::to_string( pdg_code ), {
+                                                                     SimpleCut( {"sim_tracks", "pT"}, 0.4, 2.0),
+                                                                     SimpleCut( {"sim_tracks", "pid"}, pdg_code),
+                                                                 });
+  qa_manager->AddH2({"#theta", theta, {180, 0.0, 1.7}},
+                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}}, particle);
+  qa_manager->AddH2({"#theta", theta, {180, 0.0, 1.7}},
+                    {"selected META hits centrality", {"event_header", "selected_tof_rpc_hits_centrality"}, {20, 0.0, 100.0}},
+                    pT_04);
 }
 
 }
