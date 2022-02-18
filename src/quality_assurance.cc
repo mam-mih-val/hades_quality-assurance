@@ -95,9 +95,9 @@ int main(int argv, char **argc){
       AnalysisTree::AddForwardWallHitsQA(qa_task);
   }
   if( is_reco_fw ) {
-    auto branch="reconstructed_forward_wall_hits";
+    std::string branch="reconstructed_forward_wall_hits";
     AnalysisTree::SimpleCut beta_cut({branch, "beta"}, 0, 1.0);
-    AnalysisTree::SimpleCut ring_by_ring_cuts({{branch, "ring"}, {branch, "signal"}},
+    AnalysisTree::SimpleCut ring_by_ring_cuts({branch+".ring", branch+ ".signal"},
                                               [](std::vector<double> vars) {
                                                 if (1.0 <= vars.at(0) && vars.at(0) <= 5)
                                                   return vars.at(1) > 80.0;
