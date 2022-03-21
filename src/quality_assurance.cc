@@ -15,8 +15,8 @@ int main(int argv, char **argc){
   if( argv < 2 ){
     throw std::runtime_error( "No arguments are specified. Try ./run_qa --help for more information" );
   }
-  std::string input_list;
-  std::string tree_name{"hades_analysis_tree"};
+  std::vector<std::string> in_file_lists;
+  std::vector<std::string> in_tree_names{ std::vector{std::string("hades_analysis_tree")} };
   std::string output_file{"output.root"};
   int n_events{-1};
   po::options_description options("Options");
@@ -25,9 +25,9 @@ int main(int argv, char **argc){
       ("MC,m", "MC data sample")
       ("reco-fw", "Reconstructed FW-hits QA")
       ("cuts", "Apply cuts on data")
-      ("input,i", po::value<std::string>(&input_list),
+      ("input,i", po::value<std::vector<std::string>>(&in_file_lists),
        "Input file list")
-      ("tree-name", po::value<std::string>(&tree_name),
+      ("tree-name", po::value<std::vector<std::string>>(&in_tree_names),
        "Input file list")
       ("output,o", po::value<std::string>(&output_file),
        "Name of output file")
@@ -45,11 +45,10 @@ int main(int argv, char **argc){
   bool is_reco_fw=vm.count("reco-fw");
   bool is_cuts=vm.count("cuts");
 
-  if( std::empty(input_list) )
+  if( std::empty(in_file_lists) )
     throw std::runtime_error( "Input file is not specified. Try ./run_qa --help for more information" );
-  const double beam_y = AnalysisTree::GetObjectFromFileList<AnalysisTree::DataHeader>(
-      input_list, "DataHeader")->GetBeamRapidity();
-  AnalysisTree::QA::Manager qa_manager({input_list}, {tree_name});
+  const double beam_y = AnalysisTree::GetObjectFromFileList<AnalysisTree::DataHeader>(in_file_lists.front(), "DataHeader")->GetBeamRapidity();
+  AnalysisTree::QA::Manager qa_manager(in_file_lists, in_tree_names);
   qa_manager.SetOutFileName(output_file);
   auto* qa_task = new AnalysisTree::QA::Task;
   auto event_cuts = new AnalysisTree::Cuts("evt_cuts", {
@@ -78,22 +77,20 @@ int main(int argv, char **argc){
 //                              HadesUtils::DATA_TYPE::AuAu_1_23AGeV));
     qa_manager.SetEventCuts(event_cuts);
   }
-  if( !is_reco_fw ) {
-    AnalysisTree::AddEventHeaderQA(qa_task, is_mc);
-    AnalysisTree::AddMdcVtxTracksQA(qa_task, beam_y);
-    AnalysisTree::AddMetaHitsQA(qa_task);
-    AnalysisTree::AddParticleQA(qa_task, 2212, beam_y);
-    AnalysisTree::AddParticleQA(qa_task, 211, beam_y);
-    AnalysisTree::AddParticleQA(qa_task, -211, beam_y);
-    AnalysisTree::AddParticleQA(qa_task, 321, beam_y);
-    AnalysisTree::AddParticleQA(qa_task, -321, beam_y);
-    AnalysisTree::AddParticleQA(qa_task, 11, beam_y);
-    AnalysisTree::AddParticleQA(qa_task, -11, beam_y);
+  AnalysisTree::AddEventHeaderQA(qa_task, is_mc);
+  AnalysisTree::AddMdcVtxTracksQA(qa_task, beam_y);
+  AnalysisTree::AddMetaHitsQA(qa_task);
+  AnalysisTree::AddParticleQA(qa_task, 2212, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, 211, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, -211, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, 321, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, -321, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, 11, beam_y);
+  AnalysisTree::AddParticleQA(qa_task, -11, beam_y);
 //    AnalysisTree::AddParticleQA(qa_task, 45, beam_y);
 //    AnalysisTree::AddParticleQA(qa_task, 46, beam_y);
-    if( !is_mc )
-      AnalysisTree::AddForwardWallHitsQA(qa_task);
-  }
+  if( !is_mc )
+    AnalysisTree::AddForwardWallHitsQA(qa_task);
   if( is_reco_fw ) {
     std::string branch="reconstructed_forward_wall_hits";
     AnalysisTree::SimpleCut beta_cut({branch, "beta"}, 0, 1.0);
