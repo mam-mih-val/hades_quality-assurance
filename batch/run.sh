@@ -5,7 +5,7 @@ file_list=$2
 wall_list=$3
 output_dir=$4
 
-partition=debug
+partition=main
 time=0:20:00
 
 lists_dir=${output_dir}/lists/
