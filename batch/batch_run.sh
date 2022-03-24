@@ -7,6 +7,7 @@ date $format
 job_num=$(($SLURM_ARRAY_TASK_ID))
 
 filelist=$lists_dir/$(ls $lists_dir | sed "${job_num}q;d")
+walllist=$wall_dir/$(ls $wall_dir | sed "${job_num}q;d")
 
 cd $output_dir
 mkdir -p $job_num
@@ -20,8 +21,11 @@ echo "loading /lustre/hades/user/mmamaev/install/root-6.18.04-debian10-cxx17/bin
 echo "executing $build_dir/run_qa -N 1000 -i $filelist -o output.root --tree-name hades_analysis_tree -m"
 $build_dir/run_qa -N 10000 \
                 -i $filelist \
+                -i $wall_dir \
                 -o output.root \
                 --tree-name hades_analysis_tree \
+                --tree-name reconstructed_wall \
+                --reco-fw \
                 -m
 
 echo JOB FINISHED!
